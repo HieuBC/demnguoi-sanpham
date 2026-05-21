@@ -1,0 +1,303 @@
+# # import cv2
+# # import numpy as np
+# # import time
+
+# # cap = cv2.VideoCapture(0)
+
+# # # Giá trị màu đen trong không gian màu HSV
+# # # mau_den_duoi = np.array([0, 0, 0]) 
+# # # mau_den_tren = np.array([180, 255, 30]) 
+# # mau_vang_duoi = np.array([20, 100, 100]) 
+# # mau_vang_tren = np.array([30, 255, 255]) 
+# # so_luong_san_pham = 0
+# # vi_tri_duong_ngang = 50  # Vị trí của đường ngang trong khung hình
+
+# # while True:
+# #     ret, khung_hinh = cap.read()
+# #     if not ret:
+# #         print("Không thể đọc từ webcam.")
+# #         break
+
+# #     khung_hinh_hsv = cv2.cvtColor(khung_hinh, cv2.COLOR_BGR2HSV)
+# #     # mat_na = cv2.inRange(khung_hinh_hsv, mau_den_duoi, mau_den_tren)
+# #     mat_na = cv2.inRange(khung_hinh_hsv, mau_vang_duoi, mau_vang_tren)
+
+# #     kernel = np.ones((5, 5), np.uint8)
+# #     mat_na = cv2.morphologyEx(mat_na, cv2.MORPH_CLOSE, kernel)
+# #     mat_na = cv2.morphologyEx(mat_na, cv2.MORPH_OPEN, kernel) 
+
+# #     contours, _ = cv2.findContours(mat_na, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+# #     for contour in contours:
+# #         x, y, w, h = cv2.boundingRect(contour)
+# #         if y < vi_tri_duong_ngang < y + h:
+# #             so_luong_san_pham += 1
+
+# #     cv2.putText(khung_hinh, f'san pham mau den: {so_luong_san_pham}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+# #     cv2.line(khung_hinh, (0, vi_tri_duong_ngang), (khung_hinh.shape[1], vi_tri_duong_ngang), (0, 255, 0), 2)  # Vẽ đường ngang
+
+# #     cv2.imshow('Theo dõi đối tượng', khung_hinh)
+# #     cv2.imshow('Mặt nạ', mat_na)  # Hiển thị mặt nạ để kiểm tra
+
+# #     if cv2.waitKey(1) & 0xFF == ord('q'):
+# #         break
+
+# #     time.sleep(0.5) 
+
+# # cap.release()
+# cv2.destroyAllWindows()
+# import cv2
+# import numpy as np
+# import time
+
+# cap = cv2.VideoCapture(0)
+
+# # Giá trị màu da đen trong không gian màu HSV
+# mau_den_duoi = np.array([0, 0, 0]) 
+# mau_den_tren = np.array([180, 255, 30]) 
+
+# # Giá trị màu da trắng trong không gian màu HSV
+# mau_trang_duoi = np.array([0, 0, 200]) 
+# mau_trang_tren = np.array([180, 20, 255]) 
+
+# so_luong_san_pham_den = 0
+# so_luong_san_pham_trang = 0
+# vi_tri_duong_ngang = 300  # Vị trí của đường ngang trong khung hình
+
+# while True:
+#     ret, khung_hinh = cap.read()
+#     if not ret:
+#         print("Không thể đọc từ webcam.")
+#         break
+
+#     khung_hinh_hsv = cv2.cvtColor(khung_hinh, cv2.COLOR_BGR2HSV)
+    
+#     # Tạo mặt nạ cho màu đen và màu trắng
+#     mat_na_den = cv2.inRange(khung_hinh_hsv, mau_den_duoi, mau_den_tren)
+#     mat_na_trang = cv2.inRange(khung_hinh_hsv, mau_trang_duoi, mau_trang_tren)
+
+#     kernel = np.ones((5, 5), np.uint8)
+#     mat_na_den = cv2.morphologyEx(mat_na_den, cv2.MORPH_CLOSE, kernel)
+#     mat_na_den = cv2.morphologyEx(mat_na_den, cv2.MORPH_OPEN, kernel) 
+#     mat_na_trang = cv2.morphologyEx(mat_na_trang, cv2.MORPH_CLOSE, kernel)
+#     mat_na_trang = cv2.morphologyEx(mat_na_trang, cv2.MORPH_OPEN, kernel) 
+
+#     contours_den, _ = cv2.findContours(mat_na_den, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#     contours_trang, _ = cv2.findContours(mat_na_trang, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+#     for contour in contours_den:
+#         x, y, w, h = cv2.boundingRect(contour)
+#         if y < vi_tri_duong_ngang < y + h:
+#             so_luong_san_pham_den += 1
+
+#     for contour in contours_trang:
+#         x, y, w, h = cv2.boundingRect(contour)
+#         if y < vi_tri_duong_ngang < y + h:
+#             so_luong_san_pham_trang += 1
+
+#     cv2.putText(khung_hinh, f'Sản phẩm màu đen: {so_luong_san_pham_den}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+#     cv2.putText(khung_hinh, f'Sản phẩm màu trắng: {so_luong_san_pham_trang}', (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+#     cv2.line(khung_hinh, (0, vi_tri_duong_ngang), (khung_hinh.shape[1], vi_tri_duong_ngang), (0, 255, 0), 2)  # Vẽ đường ngang
+
+#     cv2.imshow('Theo dõi đối tượng', khung_hinh)
+#     cv2.imshow('Mặt nạ đen', mat_na_den)  # Hiển thị mặt nạ màu đen để kiểm tra
+#     cv2.imshow('Mặt nạ trắng', mat_na_trang)  # Hiển thị mặt nạ màu trắng để kiểm tra
+
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+
+#     time.sleep(0.5) 
+
+# cap.release()
+# cv2.destroyAllWindows()
+# import cv2
+# import numpy as np
+# import time
+
+# cap = cv2.VideoCapture(0)
+
+# # Giá trị màu vàng trong không gian màu HSV
+# mau_vang_duoi = np.array([20, 100, 100]) 
+# mau_vang_tren = np.array([30, 255, 255]) 
+
+# so_luong_san_pham = 0
+# vi_tri_duong_ngang = 200  # Vị trí của đường ngang trong khung hình
+
+# while True:
+#     ret, khung_hinh = cap.read()
+#     if not ret:
+#         print("Không thể đọc từ webcam.")
+#         break
+
+#     khung_hinh_hsv = cv2.cvtColor(khung_hinh, cv2.COLOR_BGR2HSV)
+#     mat_na = cv2.inRange(khung_hinh_hsv, mau_vang_duoi, mau_vang_tren)
+
+#     kernel = np.ones((5, 5), np.uint8)
+#     mat_na = cv2.morphologyEx(mat_na, cv2.MORPH_CLOSE, kernel)
+#     mat_na = cv2.morphologyEx(mat_na, cv2.MORPH_OPEN, kernel) 
+
+#     contours, _ = cv2.findContours(mat_na, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+#     for contour in contours:
+#         x, y, w, h = cv2.boundingRect(contour)
+#         if y < vi_tri_duong_ngang < y + h:
+#             so_luong_san_pham += 1
+
+#     # Đổi màu chữ chú thích thành màu đỏ (BGR: (0, 0, 255))
+#     cv2.putText(khung_hinh, f'Sản phẩm màu vàng: {so_luong_san_pham}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+#     cv2.line(khung_hinh, (0, vi_tri_duong_ngang), (khung_hinh.shape[1], vi_tri_duong_ngang), (0, 255, 0), 2)  # Vẽ đường ngang
+
+#     cv2.imshow('Theo dõi đối tượng', khung_hinh)
+#     cv2.imshow('Mặt nạ', mat_na)  # Hiển thị mặt nạ để kiểm tra
+
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+
+#     time.sleep(0.5)  # Thêm khoảng thời gian chờ 0.5 giây
+
+# cap.release()
+# cv2.destroyAllWindows()
+import cv2
+import numpy as np
+import time
+
+cap = cv2.VideoCapture(0)
+
+mau_den_duoi = np.array([0, 0, 0]) 
+mau_den_tren = np.array([180, 255, 30]) 
+
+mau_trang_duoi = np.array([0, 0, 200]) 
+mau_trang_tren = np.array([180, 20, 255]) 
+
+so_luong_san_pham_den = 0
+so_luong_san_pham_trang = 0
+vi_tri_duong_ngang = 300  
+
+while True:
+    ret, khung_hinh = cap.read()
+    if not ret:
+        print("Không thể đọc từ webcam.")
+        break
+
+    khung_hinh_hsv = cv2.cvtColor(khung_hinh, cv2.COLOR_BGR2HSV)
+    
+    # Tạo mặt nạ cho màu đen và màu trắng
+    mat_na_den = cv2.inRange(khung_hinh_hsv, mau_den_duoi, mau_den_tren)
+    mat_na_trang = cv2.inRange(khung_hinh_hsv, mau_trang_duoi, mau_trang_tren)
+
+    kernel = np.ones((5, 5), np.uint8)
+    mat_na_den = cv2.morphologyEx(mat_na_den, cv2.MORPH_CLOSE, kernel)
+    mat_na_den = cv2.morphologyEx(mat_na_den, cv2.MORPH_OPEN, kernel) 
+    mat_na_trang = cv2.morphologyEx(mat_na_trang, cv2.MORPH_CLOSE, kernel)
+    mat_na_trang = cv2.morphologyEx(mat_na_trang, cv2.MORPH_OPEN, kernel) 
+
+    contours_den, _ = cv2.findContours(mat_na_den, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours_trang, _ = cv2.findContours(mat_na_trang, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    for contour in contours_den:
+        x, y, w, h = cv2.boundingRect(contour)
+        if y < vi_tri_duong_ngang < y + h:
+            so_luong_san_pham_den += 1
+
+    for contour in contours_trang:
+        x, y, w, h = cv2.boundingRect(contour)
+        if y < vi_tri_duong_ngang < y + h:
+            so_luong_san_pham_trang += 1
+
+    # Đổi màu chữ chú thích thành màu đỏ (BGR: (0, 0, 255))
+    cv2.putText(khung_hinh, f'san pham mau den: {so_luong_san_pham_den}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+    cv2.putText(khung_hinh, f'san pham mau trang: {so_luong_san_pham_trang}', (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+    cv2.line(khung_hinh, (0, vi_tri_duong_ngang), (khung_hinh.shape[1], vi_tri_duong_ngang), (0, 255, 0), 2)  # Vẽ đường ngang
+
+    cv2.imshow('Theo dõi đối tượng', khung_hinh)
+    cv2.imshow('Mặt nạ đen', mat_na_den)  # Hiển thị mặt nạ màu đen để kiểm tra
+    cv2.imshow('Mặt nạ trắng', mat_na_trang)  # Hiển thị mặt nạ màu trắng để kiểm tra
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+    time.sleep(0.5) 
+
+cap.release()
+cv2.destroyAllWindows()
+# import cv2
+# import numpy as np
+# import time
+
+# cap = cv2.VideoCapture(0)
+
+# # Giá trị màu da đen trong không gian màu HSV
+# mau_den_duoi = np.array([0, 0, 0]) 
+# mau_den_tren = np.array([180, 255, 30]) 
+
+# # Giá trị màu da trắng trong không gian màu HSV
+# mau_trang_duoi = np.array([0, 0, 200]) 
+# mau_trang_tren = np.array([180, 20, 255]) 
+
+# # Giá trị màu vàng trong không gian màu HSV
+# mau_vang_duoi = np.array([20, 100, 100])
+# mau_vang_tren = np.array([30, 255, 255])
+
+# so_luong_san_pham_den = 0
+# so_luong_san_pham_trang = 0
+# so_luong_san_pham_vang = 0
+# vi_tri_duong_ngang = 300  # Vị trí của đường ngang trong khung hình
+
+# while True:
+#     ret, khung_hinh = cap.read()
+#     if not ret:
+#         print("Không thể đọc từ webcam.")
+#         break
+
+#     khung_hinh_hsv = cv2.cvtColor(khung_hinh, cv2.COLOR_BGR2HSV)
+    
+#     # Tạo mặt nạ cho màu đen, trắng và vàng
+#     mat_na_den = cv2.inRange(khung_hinh_hsv, mau_den_duoi, mau_den_tren)
+#     mat_na_trang = cv2.inRange(khung_hinh_hsv, mau_trang_duoi, mau_trang_tren)
+#     mat_na_vang = cv2.inRange(khung_hinh_hsv, mau_vang_duoi, mau_vang_tren)
+
+#     kernel = np.ones((5, 5), np.uint8)
+#     mat_na_den = cv2.morphologyEx(mat_na_den, cv2.MORPH_CLOSE, kernel)
+#     mat_na_den = cv2.morphologyEx(mat_na_den, cv2.MORPH_OPEN, kernel) 
+#     mat_na_trang = cv2.morphologyEx(mat_na_trang, cv2.MORPH_CLOSE, kernel)
+#     mat_na_trang = cv2.morphologyEx(mat_na_trang, cv2.MORPH_OPEN, kernel) 
+#     mat_na_vang = cv2.morphologyEx(mat_na_vang, cv2.MORPH_CLOSE, kernel)
+#     mat_na_vang = cv2.morphologyEx(mat_na_vang, cv2.MORPH_OPEN, kernel) 
+
+#     contours_den, _ = cv2.findContours(mat_na_den, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#     contours_trang, _ = cv2.findContours(mat_na_trang, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#     contours_vang, _ = cv2.findContours(mat_na_vang, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+#     for contour in contours_den:
+#         x, y, w, h = cv2.boundingRect(contour)
+#         if y < vi_tri_duong_ngang < y + h:
+#             so_luong_san_pham_den += 1
+
+#     for contour in contours_trang:
+#         x, y, w, h = cv2.boundingRect(contour)
+#         if y < vi_tri_duong_ngang < y + h:
+#             so_luong_san_pham_trang += 1
+
+#     for contour in contours_vang:
+#         x, y, w, h = cv2.boundingRect(contour)
+#         if y < vi_tri_duong_ngang < y + h:
+#             so_luong_san_pham_vang += 1
+
+#     # Đổi màu chữ chú thích thành màu đỏ (BGR: (0, 0, 255))
+#     cv2.putText(khung_hinh, f'san pham mau den: {so_luong_san_pham_den}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+#     cv2.putText(khung_hinh, f'san pham mau trang: {so_luong_san_pham_trang}', (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+#     cv2.putText(khung_hinh, f'san pham mau vang: {so_luong_san_pham_vang}', (10, 110), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+#     cv2.line(khung_hinh, (0, vi_tri_duong_ngang), (khung_hinh.shape[1], vi_tri_duong_ngang), (0, 255, 0), 2)  # Vẽ đường ngang
+
+#     cv2.imshow('Theo dõi đối tượng', khung_hinh)
+#     cv2.imshow('Mặt nạ đen', mat_na_den)  # Hiển thị mặt nạ màu đen để kiểm tra
+#     cv2.imshow('Mặt nạ trắng', mat_na_trang)  # Hiển thị mặt nạ màu trắng để kiểm tra
+#     cv2.imshow('Mặt nạ vàng', mat_na_vang)  # Hiển thị mặt nạ màu vàng để kiểm tra
+
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+
+#     time.sleep(0.5) 
+
+# cap.release()
+# cv2.destroyAllWindows()
